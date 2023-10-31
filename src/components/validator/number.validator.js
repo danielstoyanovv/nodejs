@@ -1,11 +1,11 @@
 class NumberValidator
 {
-    constructor(number) {
-        this.number = number;
+    constructor(value) {
+        this.value = value;
       }
       
     isValid() {
-        return Number.isInteger(this.number);
+        return typeof this.value === 'number'
     }
 }
 

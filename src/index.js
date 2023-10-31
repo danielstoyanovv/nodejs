@@ -10,17 +10,6 @@ app.listen(4000, () => {
 app.use('/users', userModule.router);
 app.use('/products', productModule.router);
 
-
-app.post("/users", 
-  body('email').isEmail().withMessage("Email is not valid"),
- (req, res) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-});
-
 app.post("/auth/register", 
   body('email').isEmail().withMessage("Email is not valid"),
 //  check(req.body.email, 'Email length should be 10 to 30 characters').isEmail().isLength({ min: 10, max: 30 })

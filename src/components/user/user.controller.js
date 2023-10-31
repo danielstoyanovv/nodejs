@@ -1,7 +1,7 @@
 import User from './user.entities.js';
 import EmailValidator from '../validator/email.validator.js';
-import NumberValidator from '../validator/number.validator.js';
-import PasswordValidator from '../validator/password.validator.js';
+import IntegerValidator from '../validator/integer.validator.js';
+import StringValidator from '../validator/string.validator.js';
 
 class UserController {
   constructor(userService) {
@@ -11,13 +11,13 @@ class UserController {
   createUser = (req, res) => {
     const errors = [];
 
-    const passwordValidator = new PasswordValidator(req.body.password);
-    if (!passwordValidator.isValid()) {
+    const stringValidator = new StringValidator(req.body.password);
+    if (!stringValidator.isValid()) {
       errors.push('password should be string value and minum length of 6');
     }
 
-    const numberValidator = new NumberValidator(req.body.age);
-    if (!numberValidator.isValid()) {
+    const integerValidator = new IntegerValidator(req.body.age);
+    if (!integerValidator.isValid()) {
       errors.push('age should be integer value');
     }
   

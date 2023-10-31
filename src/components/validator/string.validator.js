@@ -1,4 +1,4 @@
-class PasswordValidator
+class StringValidator
 {
     constructor(value) {
         this.value = value;
@@ -9,4 +9,4 @@ class PasswordValidator
     }
 }
 
-export default PasswordValidator;
+export default StringValidator;
