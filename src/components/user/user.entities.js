@@ -1,11 +1,22 @@
-import crypto from 'crypto';
-
 class User {
-  constructor(email, password, age) {
-    this.id = crypto.randomBytes(20).toString('hex');
+  setId(id) {
+    this.id = id;
+    return this;
+  }
+
+  setEmail(email) {
     this.email = email;
+    return this;
+  }
+
+  setPassword(password) {
     this.password = password;
+    return this;
+  }
+
+  setAge(age) {
     this.age = age;
+    return this;
   }
 
   toJSON() {
