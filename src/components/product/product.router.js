@@ -10,6 +10,7 @@ class ProductRouter {
     router.route('/:id').get(this.productController.getProduct);
     router.route('/').get(this.productController.getProducts);
     router.route('/').post(this.productController.createProduct);
+    router.route('/:id').patch(this.productController.updateProduct);
     return router;
   }
 }

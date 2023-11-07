@@ -1,11 +1,22 @@
-import crypto from 'crypto';
-
 class Product {
-  constructor(name, description, price) {
-    this.id = crypto.randomBytes(20).toString('hex');
+  setId(id) {
+    this.id = id;
+    return this;
+  }
+
+  setName(name) {
     this.name = name;
+    return this;
+  }
+
+  setDescription(description) {
     this.description = description;
+    return this;
+  }
+
+  setPrice(price) {
     this.price = price;
+    return this;
   }
 
   toJSON() {
