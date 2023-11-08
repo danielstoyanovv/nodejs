@@ -80,7 +80,6 @@ class UserController {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const email = req.body.email;
         const age = req.body.age;
-
         db.query('INSERT INTO users SET?', {
             email: email,
             password: hashedPassword,
