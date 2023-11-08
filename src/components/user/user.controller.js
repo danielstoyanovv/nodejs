@@ -8,15 +8,16 @@ import bcrypt, {compareSync} from "bcrypt";
 
 class UserController {
     createUser = async (req, res) => {
+        const email = req.body.email;
         const sqlSearch = "SELECT email FROM users WHERE email = ?";
-        const searchQuery = mysql.format(sqlSearch, [req.body.email]);
+        const searchQuery = mysql.format(sqlSearch, [email]);
         await db.query(searchQuery, async (error, result) => {
             if (result.length > 0) {
                 return res.status(409).json({errors: ['user already exists']});
             }
             const errors = this.processValidators(req);
             const mainThis = this;
-            const emailValidator = new EmailValidator(req.body.email);
+            const emailValidator = new EmailValidator(email);
             emailValidator.isValid().then(async function (result) {
                 if (result.valid === false) {
                     errors.push('email is not valid');
@@ -30,29 +31,33 @@ class UserController {
     };
 
     updateUser = async (req, res) => {
-        const errors = this.processValidators(req);
-        if (errors.length > 0) {
-            return res.status(400).json({ errors: errors });
-        }
-        const email = req.body.email;
-        const emailValidator = new EmailValidator(email);
-        emailValidator.isValid().then(async function (result) {
-            if (result.valid === false) {
-                errors.push('email is not valid');
+        const {id} = req.params;
+        const sqlSearch = "SELECT id  FROM users WHERE id = ?";
+        const searchQuery = mysql.format(sqlSearch, [id]);
+        await db.query(searchQuery, async (error, result) => {
+            if (result.length === 0) {
+                return res.status(404).json({errors: ['user not found']});
             }
-            if (errors.length > 0) {
-                return res.status(400).json({errors: errors});
-            }
-            const {id} = req.params;
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const age = req.body.age;
-            const sqlUpdate = "UPDATE users set email = ?, password = ?, age = ? WHERE id = ?";
-            const updateQuery = mysql.format(sqlUpdate, [email, hashedPassword, age, id]);
-            await db.query(updateQuery, async (error, result) => {
-                if (result) {
-                    let item = {id: id, email: email, password: hashedPassword, age: age};
-                    return res.status(200).send(item);
+            const errors = this.processValidators(req);
+            const email = req.body.email;
+            const emailValidator = new EmailValidator(email);
+            emailValidator.isValid().then(async function (result) {
+                if (result.valid === false) {
+                    errors.push('email is not valid');
                 }
+                if (errors.length > 0) {
+                    return res.status(400).json({errors: errors});
+                }
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                const age = req.body.age;
+                const sqlUpdate = "UPDATE users set email = ?, password = ?, age = ? WHERE id = ?";
+                const updateQuery = mysql.format(sqlUpdate, [email, hashedPassword, age, id]);
+                await db.query(updateQuery, async (error, result) => {
+                    if (result) {
+                        let item = {id: id, email: email, password: hashedPassword, age: age};
+                        return res.status(200).send(item);
+                    }
+                });
             });
         });
     };

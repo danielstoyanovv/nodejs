@@ -5,6 +5,6 @@ const productController = new ProductController();
 const productRouter = new ProductRouter(productController);
 
 export default {
-  controller: productController,
-  router: productRouter.getRouter(),
+    controller: productController,
+    router: productRouter.getRouter(),
 };
