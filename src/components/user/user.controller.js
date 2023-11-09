@@ -55,7 +55,7 @@ class UserController {
                 await db.query(updateQuery, async (error, result) => {
                     if (result) {
                         let item = {id: id, email: email, password: hashedPassword, age: age};
-                        return res.status(200).send(item);
+                        return res.status(200).send(JSON.stringify(item));
                     }
                 });
             });
@@ -70,7 +70,7 @@ class UserController {
         const searchQuery = mysql.format(sqlSearch, [id]);
         await db.query(searchQuery, async (error, result) => {
             if (result.length > 0) {
-                return res.status(200).send(result);
+                return res.status(200).send(JSON.stringify(result));
             }
             return res.status(404).json({errors: ['user not found']});
         });
@@ -94,14 +94,14 @@ class UserController {
                     .setEmail(email)
                     .setPassword(hashedPassword)
                     .setAge(age);
-                return response.status(201).send(user);
+                return response.status(201).send(JSON.stringify(user));
             }
         })
     };
 
     getItems = async (res) => {
         db.query('SELECT id, email, age  FROM users ORDER BY id DESC', async (error, result) => {
-            return  res.status(200).send(result);
+            return  res.status(200).send(JSON.stringify(result));
         });
     };
 

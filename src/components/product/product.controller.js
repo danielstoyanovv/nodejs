@@ -33,7 +33,7 @@ class ProductController {
             await db.query(updateQuery, async (error, result) => {
                 if (result) {
                     let item = {id: id, name: name, description: description, price: price};
-                    return res.status(200).send(item);
+                    return res.status(200).send(JSON.stringify(item));
                 }
             });
         });
@@ -47,7 +47,7 @@ class ProductController {
         const searchQuery = mysql.format(sqlSearch, [id]);
         await db.query(searchQuery, async (error, result) => {
             if (result.length > 0) {
-                return res.status(200).send(result);
+                return res.status(200).send(JSON.stringify(result));
             }
             return res.status(404).json({errors: ['product not found']});
         });
@@ -71,14 +71,14 @@ class ProductController {
                     .setName(name)
                     .setDescription(description)
                     .setPrice(price);
-                return response.status(201).send(product);
+                return response.status(201).send(JSON.stringify(product));
             }
         })
     };
 
     getItems = async (res) => {
         db.query('SELECT id, name, description, price  FROM products ORDER BY id DESC', async (error, result) => {
-            return  res.status(200).send(result);
+            return  res.status(200).send(JSON.stringify(result));
         });
     };
 
